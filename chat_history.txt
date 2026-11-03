@@ -531,3 +531,86 @@ PRE-SUBMISSION VERIFICATION:
    - Zero credentials printed or stored in logs, history, or git.
 
 --------------------------------------------------------------------------------
+================================================================================
+USER INTERACTION: Phase 3 GBIF DWCA Download Execution & Integrity Verification
+TIMESTAMP: 2026-11-03T22:53:00+05:30
+================================================================================
+
+ACTIONS & DELIVERABLES:
+1. Credential Check & Registration:
+   - Credentials safely loaded from dark_eco/.env without echoing secrets or headers.
+   - Submitted registered download request to official GBIF Asynchronous Download API.
+   - Assigned Download Identifier: `0025038-261023074918325`
+   - Official Citable DOI Issued: `10.15468/dl.rum47g` (https://doi.org/10.15468/dl.rum47g)
+   - Format: DWCA (Darwin Core Archive)
+2. Asynchronous Download & Transfer:
+   - Polled status from PREPARING -> RUNNING -> SUCCEEDED (~86 min cluster processing).
+   - Downloaded archive to `dark_eco/data/raw/gbif/gbif_dei_2012_2024_three_landscapes_dwca.zip` using atomic .part transfer.
+   - Archive size: 1,165,036,032 bytes (1,165.0 MB).
+   - Local SHA-256 Checksum: `10621204417a59709ad931ecaecfed0cc87c017f64e142d0186d0cfccae68038`.
+   - Extracted to `dark_eco/data/raw/gbif/extracted/` (meta.xml, metadata.xml, occurrence.txt [4.57 GB], verbatim.txt [2.24 GB], multimedia.txt [32.3 MB]).
+3. Empirical Occurrence Row & Regional Audit:
+   - Total rows in occurrence.txt: Exactly 3,901,020 (Expected: 3,901,020; Delta = 0).
+   - Bengaluru: 2,947,292 records (2,946,708 inside 100 cells, 584 in southern meridian sliver flagged as `outside_grid_assignment`, cell_id = None).
+   - Mysuru: 761,890 records (100% inside 100-cell grid).
+   - Nilgiri-Bandipur: 191,838 records (100% inside 100-cell grid).
+   - Zero out-of-bounds records.
+4. Schema & Field Verification:
+   - Core occurrence table contains 230 indexed columns as defined in `meta.xml`.
+   - `eventID` populated in 3,807,371 rows (97.60%).
+   - In Class Aves: 99.24% of records have `eventID` populated with eBird submission checklist IDs.
+   - Non-avian taxa: >98% lack `eventID` (all 104,772 non-avian records preserved in archive).
+   - `samplingProtocol` is 99.94% missing; `coordinateUncertaintyInMeters` is 97.84% missing.
+   - `occurrenceStatus` is 99.99997% PRESENT (100% presence-only; zero non-detections).
+5. New & Updated Artifacts:
+   - `data/metadata/gbif_download_manifest.json` (updated with download key, DOI, SHA-256).
+   - `data/metadata/gbif_archive_integrity_summary.json` (structured empirical audit results).
+   - `notebooks/phase_3_biodiversity/08_gbif_dwca_archive_verification.ipynb` (generated and executed in-place with outputs).
+   - `reports/phase_3/gbif_download_execution_report.md` (created).
+   - `reports/phase_3/gbif_archive_integrity_report.md` (created).
+   - `notebooks/phase_3_biodiversity/README.md` (updated).
+6. Strict Compliance:
+   - Zero synthetic data, zero pseudo-absences, zero fabricated effort.
+   - Zero credential leaks in code, logs, or reports.
+   - Raw data (.zip, .txt) excluded from Git via .gitignore.
+   - NO remote git push; halted awaiting user review.
+
+--------------------------------------------------------------------------------
+================================================================================
+USER INTERACTION: Final GBIF DWCA Reconciliation & Provenance Audit
+TIMESTAMP: 2026-11-03T23:17:40+05:30
+================================================================================
+
+ACTIONS & RECONCILIATION FINDINGS:
+1. Bengaluru Grid Assignment & 23-Record Discrepancy:
+   - Earlier cell query sum: 2,946,731; Actual occurrence census inside 100 cells: 2,946,708. Difference = exactly 23 records.
+   - Identified the exact 8 cells with count differences: BLR_R10_C04 (+4) and BLR_R10_C07 (+19) in northernmost Row 10; adjacent cell boundary roundings (+1/-1) in R03_C04/R04_C04, R03_C09/R03_C10, and R06_C05/R06_C06.
+   - Geodesic proof: Lines of constant Northing (Y = 1,460,000 m) curve northward in WGS84 degree space. The 100-cell grid cells in Row 10 follow this curve with 10 segments, while the 4-vertex outer study polygon connected NW and NE corners with a straight chord.
+   - The 23 records lie in the northern crescent sliver between the straight chord and the 10-cell boundary. They were captured by individual cell queries, but were excluded from the download predicate.
+   - Final verified Bengaluru counts in downloaded archive: 2,946,708 inside 100 cells; 584 in southern meridian sliver flagged as `outside_grid_assignment` (cell_id = None); total = 2,947,292 clean records (exact reconciliation).
+2. eventID Completeness Audit:
+   - eBird Birds (Class Aves): 3,796,248 records (97.31% of archive); 100.00% have eventID (0 missing).
+   - Non-eBird Birds (Aves from iNat, museums): 29,055 records; 0.13% have eventID (29,017 missing, 99.87%).
+   - Non-Avian Taxa: 75,717 records; 14.64% have eventID (11,085 populated, 64,632 missing, 85.36%).
+   - Discrepancy explained: Non-avian fauna (insects, arachnids, reptiles, amphibians) is indeed 98.4% missing eventID. Dicot plants (Magnoliopsida) had 10,061 records with eventID from SeasonWatch / IISc (44.9% completeness).
+   - Checklist-level grouping is strictly restricted to eBird avifauna.
+3. individualCount Semantic Audit:
+   - In eBird: Populated in 96.13% of records; represents observer's reported count of individuals detected during the visit. NULL (3.87%) corresponds to "X" (present, uncounted).
+   - In non-eBird: Missing/NULL in 84.35% of records; when populated, almost uniformly "1" (photo/specimen voucher).
+   - Distinguished from observer count (party size) and survey effort (minutes, km).
+   - Governing rule: individualCount must NOT be used as population abundance or density.
+4. GBIF Download Provenance & Timestamps:
+   - Queried official GBIF download metadata endpoint for key `0025038-261023074918325`.
+   - Creation timestamp: `2026-11-03T15:49:20.852Z` (confirmed 3 November 2026).
+   - Completion timestamp: `2026-11-03T17:16:40.083Z` (confirmed 3 November 2026; status SUCCEEDED).
+   - Identifier syntax explained: Generated by Apache Oozie workflow scheduler on GBIF's cluster: `0025038` is the sequential job counter, and `261023074918325` is the cluster engine startup timestamp (`2026-10-23 07:49:18.325 UTC`).
+5. Deliverables Created & Updated:
+   - Created and executed `notebooks/phase_3_biodiversity/09_gbif_final_reconciliation.ipynb` in-place with all outputs preserved.
+   - Updated `reports/phase_3/gbif_archive_integrity_report.md` with full reconciliation details.
+   - Updated `notebooks/phase_3_biodiversity/README.md`.
+6. Stopping Rules Observed:
+   - Zero synthetic data, zero pseudo-absences.
+   - Zero Git push.
+   - Spatial aggregation halted awaiting approval.
+
+--------------------------------------------------------------------------------

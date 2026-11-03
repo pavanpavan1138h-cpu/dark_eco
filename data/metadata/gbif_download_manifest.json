@@ -1,0 +1,18 @@
+{
+  "download_key": "0025038-261023074918325",
+  "status": "DOWNLOADED",
+  "archive_filename": "gbif_dei_2012_2024_three_landscapes_dwca.zip",
+  "archive_size_bytes": 1165036032,
+  "sha256": "10621204417a59709ad931ecaecfed0cc87c017f64e142d0186d0cfccae68038",
+  "doi": "10.15468/dl.rum47g",
+  "total_records": 3901020,
+  "created_utc": "2026-11-03T15:49:20.852+00:00",
+  "download_link": "https://api.gbif.org/v1/occurrence/download/request/0025038-261023074918325.zip",
+  "format": "DWCA",
+  "expected_records": 3901020,
+  "expected_regional_breakdown": {
+    "bengaluru": 2947292,
+    "mysuru": 761890,
+    "nilgiri_bandipur": 191838
+  }
+}

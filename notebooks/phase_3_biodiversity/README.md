@@ -50,4 +50,21 @@ This directory contains the executed Jupyter Notebooks for **Phase 3: GBIF Biodi
    - Recommendation of `DWCA` format for registered bulk download.
    - Validated GBIF Download Predicate: `or` container with 3 closed, CCW WKT study polygons generating a permanent citable DOI (~3.9M clean records).
 
-*Note: All notebooks are fully executed in-place with outputs preserved. Bulk downloads are halted pending user authorization.*
+8. **`08_gbif_dwca_archive_verification.ipynb`**:
+   - Comprehensive empirical verification of the downloaded Darwin Core Archive (`0025038-261023074918325`, DOI `10.15468/dl.rum47g`).
+   - Archive descriptor (`meta.xml`) and 230-column occurrence schema inspection.
+   - Exact record count validation: 3,901,020 records (Bengaluru: 2,947,292, Mysuru: 761,890, Nilgiri–Bandipur: 191,838; Delta = 0).
+   - Bengaluru spatial grid assignment verification: 2,946,708 records inside 100 cells, 584 records in southern meridian sliver flagged as `outside_grid_assignment` (cell_id = None).
+   - `eventID` completeness and checklist clustering analysis: 97.6% overall; 99.2% for Class Aves; missingness audit across taxonomic classes.
+   - Missingness audit: `samplingProtocol` (99.94% null), `coordinateUncertaintyInMeters` (97.84% null), absence of true non-detections.
+   - Final certification of data integrity and presence-only modeling governance.
+
+9. **`09_gbif_final_reconciliation.ipynb`**:
+   - Focused independent reconciliation of the four critical review issues.
+   - Geodetic resolution of the 23-record Bengaluru grid discrepancy: proved that northern meridian curvature of Row 10 cells (`BLR_R10_C04` [+4] and `BLR_R10_C07` [+19]) extended beyond the 4-vertex straight outer chord used in the bulk download predicate.
+   - Verified final Bengaluru grid partition: 2,946,708 inside 100 cells; 584 in southern sliver (`outside_grid_assignment`, cell_id = None); total = 2,947,292 clean records.
+   - Taxonomic and source-specific `eventID` completeness audit: eBird birds (100.0% with `eventID`), non-eBird birds (0.13% with `eventID`), non-avian taxa (14.64% with `eventID` overall; 98.4% missing for fauna; 44.9% with `eventID` in plants via SeasonWatch/IISc).
+   - `individualCount` semantic audit: established as reported encounter counts of detected individuals during visits (NULL = "X"), explicitly distinguished from observer count, survey effort, and population abundance/density.
+   - Official GBIF provenance verification: verified against `api.gbif.org/v1/occurrence/download/0025038-261023074918325`, explaining Apache Oozie cluster timestamp syntax (`261023074918325`) vs actual submission time (`2026-11-03T15:49:20.852Z`).
+
+*Note: All 9 Phase 3 notebooks are fully executed in-place with outputs preserved.*

@@ -1,0 +1,234 @@
+{
+  "total_records": 3901020,
+  "expected_records": 3901020,
+  "discrepancy": 0,
+  "temporal_range": {
+    "min_year": 2012,
+    "max_year": 2024
+  },
+  "regional_counts": {
+    "bengaluru": 2947292,
+    "mysuru": 761890,
+    "nilgiri_bandipur": 191838,
+    "unassigned": 0
+  },
+  "bengaluru_grid_split": {
+    "inside_100_cells": 2946708,
+    "outside_grid_slivers": 584,
+    "total_bengaluru": 2947292
+  },
+  "event_id_analysis": {
+    "total_with_event_id": 3807371,
+    "total_missing_event_id": 93649,
+    "pct_with_event_id": 97.6,
+    "sample_event_ids": [
+      "57550",
+      "iisc:wg:plants:2010-12:Nil03",
+      "57338",
+      "iisc:wg:plants:2010-12:Nil01",
+      "57742",
+      "2024-23-85-03",
+      "57705",
+      "57881",
+      "iisc:wg:plants:2010-12:Nil02",
+      "urn:ncf:epe:seasonwatch"
+    ]
+  },
+  "dataset_provenance": {
+    "ebird_records": 3796248,
+    "pct_ebird": 97.31,
+    "non_ebird_records": 104772,
+    "pct_non_ebird": 2.69
+  },
+  "missingness": {
+    "sampling_protocol_pct_missing": 99.94,
+    "coord_uncertainty_pct_missing": 97.84,
+    "individual_count_pct_missing": 6.03
+  },
+  "occurrence_status_distribution": {
+    "PRESENT": 3901019,
+    "ABSENT": 1
+  },
+  "taxonomic_event_id_breakdown": {
+    "Aves": {
+      "total": 3825303,
+      "has_event_id": 3796286
+    },
+    "": {
+      "total": 209,
+      "has_event_id": 0
+    },
+    "Agaricomycetes": {
+      "total": 112,
+      "has_event_id": 0
+    },
+    "Magnoliopsida": {
+      "total": 23036,
+      "has_event_id": 10349
+    },
+    "Liliopsida": {
+      "total": 1038,
+      "has_event_id": 79
+    },
+    "Insecta": {
+      "total": 38296,
+      "has_event_id": 23
+    },
+    "Malacostraca": {
+      "total": 22,
+      "has_event_id": 0
+    },
+    "Arachnida": {
+      "total": 5536,
+      "has_event_id": 2
+    },
+    "Amphibia": {
+      "total": 770,
+      "has_event_id": 10
+    },
+    "Mammalia": {
+      "total": 2930,
+      "has_event_id": 555
+    },
+    "Squamata": {
+      "total": 2565,
+      "has_event_id": 67
+    },
+    "Gastropoda": {
+      "total": 540,
+      "has_event_id": 0
+    },
+    "Pinopsida": {
+      "total": 14,
+      "has_event_id": 0
+    },
+    "Crocodylia": {
+      "total": 109,
+      "has_event_id": 0
+    },
+    "Testudines": {
+      "total": 113,
+      "has_event_id": 0
+    },
+    "Cycadopsida": {
+      "total": 5,
+      "has_event_id": 0
+    },
+    "Polypodiopsida": {
+      "total": 39,
+      "has_event_id": 0
+    },
+    "Diplopoda": {
+      "total": 94,
+      "has_event_id": 0
+    },
+    "Lecanoromycetes": {
+      "total": 5,
+      "has_event_id": 0
+    },
+    "Dacrymycetes": {
+      "total": 6,
+      "has_event_id": 0
+    },
+    "Dothideomycetes": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Sordariomycetes": {
+      "total": 43,
+      "has_event_id": 0
+    },
+    "Chlorophyceae": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Tremellomycetes": {
+      "total": 8,
+      "has_event_id": 0
+    },
+    "Arthoniomycetes": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Chilopoda": {
+      "total": 9,
+      "has_event_id": 0
+    },
+    "Protosteliomycetes": {
+      "total": 4,
+      "has_event_id": 0
+    },
+    "Hoplonemertea": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Bivalvia": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Leotiomycetes": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Myxomycetes": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Bacilli": {
+      "total": 43,
+      "has_event_id": 0
+    },
+    "Blastocladiomycetes": {
+      "total": 6,
+      "has_event_id": 0
+    },
+    "Gammaproteobacteria": {
+      "total": 113,
+      "has_event_id": 0
+    },
+    "Eurotiomycetes": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Chromadorea": {
+      "total": 24,
+      "has_event_id": 0
+    },
+    "Naldaviricetes": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Microsporea": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Monjiviricetes": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Clostridia": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Repensiviricetes": {
+      "total": 3,
+      "has_event_id": 0
+    },
+    "Arfiviricetes": {
+      "total": 1,
+      "has_event_id": 0
+    },
+    "Actinomycetia": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Alphaproteobacteria": {
+      "total": 2,
+      "has_event_id": 0
+    },
+    "Bacteroidia": {
+      "total": 1,
+      "has_event_id": 0
+    }
+  }
+}
