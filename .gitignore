@@ -1,0 +1,120 @@
+# =====================================================================
+# DEI project .gitignore
+# Goal: keep code, notebooks, docs and small metadata in Git;
+#       keep research data, credentials and environments OUT of Git.
+# NOTE: this project must never be pushed without explicit authorisation.
+# =====================================================================
+
+# ---------- Research data (never commit) ----------
+# Everything inside raw/ and processed/ is ignored except README.md files.
+data/raw/**
+!data/raw/**/
+!data/raw/**/README.md
+data/processed/**
+!data/processed/**/
+!data/processed/**/README.md
+
+# Large / binary research formats anywhere in the project
+*.tif
+*.tiff
+*.TIF
+*.nc
+*.nc4
+*.h5
+*.hdf
+*.he5
+*.grib
+*.grb
+*.grib2
+*.parquet
+*.feather
+*.zarr/
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.pbf
+*.osm
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.7z
+*.rar
+
+# Large CSV/TSV research tables: ignored by default inside data/ ...
+data/**/*.csv
+data/**/*.tsv
+data/**/*.txt
+# ... EXCEPT small metadata catalogues, which we DO want versioned
+!data/metadata/*.csv
+!data/metadata/**/*.csv
+!data/metadata/**/*.json
+!data/metadata/**/*.md
+
+# External reference documents (PDF papers, reports) - keep only the README/list
+data/external_references/**
+!data/external_references/**/
+!data/external_references/README.md
+!data/external_references/reference_list.csv
+
+# ---------- Temporary / download artefacts ----------
+*.part
+*.partial
+*.crdownload
+*.tmp
+*.temp
+tmp/
+temp/
+downloads_tmp/
+.cache/
+cache/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+env/
+.conda/
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ---------- Credentials, keys and local config (NEVER commit) ----------
+.env
+.env.*
+*.env
+.cdsapirc
+.netrc
+_netrc
+*.pem
+*.key
+credentials*
+secrets*
+*_token*
+*api_key*
+config.local.*
+.earthdata*
+
+# ---------- Logs ----------
+# Conversation log is private; kept locally only.
+logs/*
+!logs/README.md
+
+# ---------- OS / editor ----------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+

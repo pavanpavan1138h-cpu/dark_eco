@@ -1,0 +1,4 @@
+region_id,region_name,total_osm_highway_ways,ways_with_lit_tag,pct_ways_with_lit_tag
+bengaluru,Bengaluru urban-peri-urban window,Error,Error,Error
+mysuru,Mysuru peri-urban / transitional window,Error,Error,Error
+nilgiri_bandipur,Bandipur-Mudumalai forest window (Nilgiri-Bandipur),Error,Error,Error

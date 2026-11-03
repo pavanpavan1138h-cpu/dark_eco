@@ -1,0 +1,4 @@
+region_id,region_name,total_gbif_records,records_1992_2013,records_2014_2024,basis_of_record
+bengaluru,Bengaluru urban-peri-urban window,3562914,25423,2941456,"HUMAN_OBSERVATION: 3,558,000, PRESERVED_SPECIMEN: 3,689, MATERIAL_SAMPLE: 848"
+mysuru,Mysuru peri-urban / transitional window,937355,72234,749703,"HUMAN_OBSERVATION: 936,474, PRESERVED_SPECIMEN: 548, MATERIAL_SAMPLE: 177"
+nilgiri_bandipur,Bandipur-Mudumalai forest window (Nilgiri-Bandipur),240918,15448,187147,"HUMAN_OBSERVATION: 238,208, PRESERVED_SPECIMEN: 2,410, MATERIAL_SAMPLE: 213"

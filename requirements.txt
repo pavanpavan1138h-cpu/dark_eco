@@ -1,0 +1,31 @@
+# DEI project Python dependencies (versions used to execute the Phase 1 notebooks).
+# Install into a project-local virtual environment:
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r requirements.txt
+#   .venv/bin/python -m ipykernel install --user --name dei-ann-pbl --display-name "DEI (ANN PBL)"
+
+# Core data handling
+pandas==3.1.0
+numpy==2.5.4
+requests==2.34.2
+
+# Geospatial
+geopandas==1.2.0
+shapely==2.2.0
+pyproj==3.8.0
+pyogrio==0.13.0
+rasterio==1.5.2
+rioxarray==0.24.0
+xarray==2026.9.0
+h5py==3.16.0
+
+# Visualisation
+matplotlib==3.11.2
+
+# Notebooks
+jupyter==1.1.1
+notebook==7.6.4
+ipykernel==7.4.0
+nbconvert==7.17.2
+nbformat==5.11.1
+

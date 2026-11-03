@@ -1,0 +1,16 @@
+{
+  "dataset_name": "OpenStreetMap reference features (via Nominatim lookup)",
+  "original_source": "OpenStreetMap contributors",
+  "official_url": "https://www.openstreetmap.org",
+  "api_endpoint": "https://nominatim.openstreetmap.org/lookup?osm_ids=R7902476%2CR8124064%2CW41662659%2CW252746837%2CR19125269%2CR9329660%2CR5867868%2CW159049291%2CW159049306%2CN902588435%2CN245598696%2CN245592179&format=jsonv2&polygon_geojson=1",
+  "access_date_utc": "2026-11-03T12:44:51Z",
+  "licence": "Open Database License (ODbL) 1.0 - attribution: \u00a9 OpenStreetMap contributors",
+  "geographical_coverage": "12 named features in/near the three DEI windows",
+  "temporal_coverage": "Snapshot of OSM at access date",
+  "file_format": "JSON (Nominatim jsonv2 with GeoJSON geometries)",
+  "download_method": "HTTP GET, Nominatim /lookup by OSM ID",
+  "original_filename": "nominatim_lookup_reference_features.json",
+  "transformations": "none (stored as received)",
+  "known_limitations": "Community-mapped; not legally authoritative; boundaries may differ from gazette notifications.",
+  "used_by": "notebooks/phase_1_setup/01_project_and_geographical_setup.ipynb"
+}

@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "study_areas_summary",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "region_id": "bengaluru", "region_name": "Bengaluru urban-peri-urban window", "landscape_type": "highly urbanised", "anchor": "Central Bengaluru (Vidhana Soudha area)", "utm_min_x": 756000, "utm_min_y": 1410000, "utm_max_x": 806000, "utm_max_y": 1460000, "n_cells": 100, "cell_size_m": 5000 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 77.817858656073867, 12.739602849969117 ], [ 77.822948260187644, 13.191188864183916 ], [ 77.361985687666063, 13.195856555938462 ], [ 77.357725108127028, 12.744105465729385 ], [ 77.817858656073867, 12.739602849969117 ] ] ] } },
+{ "type": "Feature", "properties": { "region_id": "mysuru", "region_name": "Mysuru peri-urban / transitional window", "landscape_type": "peri-urban and transitional", "anchor": "Mysuru city centre (Mysuru Palace area)", "utm_min_x": 655000, "utm_min_y": 1336000, "utm_max_x": 705000, "utm_max_y": 1386000, "n_cells": 100, "cell_size_m": 5000 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 76.883407431419329, 12.079048960444254 ], [ 76.886630978602682, 12.530962142498181 ], [ 76.426593380577714, 12.533798538042673 ], [ 76.424155112885316, 12.081780030540779 ], [ 76.883407431419329, 12.079048960444254 ] ] ] } },
+{ "type": "Feature", "properties": { "region_id": "nilgiri_bandipur", "region_name": "Bandipur-Mudumalai forest window (Nilgiri-Bandipur)", "landscape_type": "forest and protected-area", "anchor": "Karnataka-Tamil Nadu border near Moyar river (Bandipur/Mudumalai junction)", "utm_min_x": 649000, "utm_min_y": 1264000, "utm_max_x": 699000, "utm_max_y": 1314000, "n_cells": 100, "cell_size_m": 5000 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 76.824013426299331, 11.428614329458885 ], [ 76.82696546958995, 11.880563726388663 ], [ 76.368035732276624, 11.883159182948372 ], [ 76.365824578980707, 11.43110843375003 ], [ 76.824013426299331, 11.428614329458885 ] ] ] } }
+]
+}
