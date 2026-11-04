@@ -614,3 +614,154 @@ ACTIONS & RECONCILIATION FINDINGS:
    - Spatial aggregation halted awaiting approval.
 
 --------------------------------------------------------------------------------
+================================================================================
+USER INTERACTION: Phase 4 GloBI Investigation, Quality Audit & Acquisition Plan
+TIMESTAMP: 2026-11-04T00:45:00+05:30
+================================================================================
+
+ACTIONS & DELIVERABLES:
+1. GloBI API Architecture & Query Mechanics Probing:
+   - Evaluated official GloBI REST API endpoints (`https://api.globalbioticinteractions.org/`).
+   - Cataloged all 75 metadata terms from `/interactionFields`.
+   - Critical Discovery: Passing `includeObservations=true` is strictly mandatory to extract empirical observation instances with coordinates and timestamps. Without it, records are aggregated and lack coordinates.
+   - Proved pagination via `limit` (up to 10,000 per request) and `offset`. Verified `json`, `csv`, and `tsv` response handlers.
+2. Controlled Regional Spatial Queries & Availability Audit:
+   - Bengaluru (Urban): 7,226 records retrieved from BBOX (`77.3577,12.7396,77.8229,13.1959`); 7,222 inside approved 50 km polygon (4 in bbox slivers); 7,222 assigned to 86/100 5 km grid cells; 100.0% geocoded; 62.0% in 2012–2024 window.
+   - Mysuru (Peri-urban): 946 records retrieved from BBOX (`76.4242,12.0790,76.8866,12.5338`); 946 inside polygon; 946 assigned to 49/100 cells; 100.0% geocoded; 60.7% in 2012–2024 window.
+   - Nilgiri–Bandipur (Forest, Option A): 876 records retrieved from BBOX (`76.3658,11.4286,76.8270,11.8832`); 876 inside polygon; 876 assigned to 28/100 cells; 100.0% geocoded; 11.9% in 2012–2024 window.
+   - Grand Total: 9,048 records retrieved, 9,044 inside study polygons and assigned to 5 km grid cells across 163 / 300 cells (54.3% cell coverage).
+3. Data Source Provenance & Forest Temporal Discordance Explained:
+   - Bengaluru (93%) and Mysuru (89%) are heavily sourced from iNaturalist citizen science interactions.
+   - Nilgiri–Bandipur (78%) is sourced from CarniDIET 1.0 (Middleton et al.), capturing peer-reviewed field scat/kill analyses of large carnivores (Tiger, Leopard, Dhole) surveyed in 2006 and 2008. These provide a high-quality empirical trophic scaffold.
+4. Bidirectional Symmetry & Trophic Predicate Audit:
+   - Proven that GloBI indexes interactions bidirectionally: `eats` (predator -> prey) paired with `eatenBy` (prey -> predator); `preysOn` with `preyedUponBy`; `hasHost` with `hostOf`.
+   - Accounts for 4,524 unique biological interaction events across the three landscapes.
+5. Taxonomic Cross-Referencing with GBIF Occurrences:
+   - Scanned all 3,901,020 GBIF occurrences and extracted complete species inventory (3,964 unique species).
+   - Matched against 1,206 unique GloBI taxa across the 3 regions: exactly 615 direct binomial species matches (51.0% exact match rate; 51.6% in BLR, 61.6% in MYS, 50.4% in NB).
+   - Higher-taxon resolution matches the remaining taxa to families and genera.
+6. Execution of 4 Jupyter Notebooks in `notebooks/phase_4_globi/`:
+   - `01_globi_api_and_source_investigation.ipynb`
+   - `02_globi_regional_data_availability.ipynb`
+   - `03_globi_sample_record_and_schema_audit.ipynb`
+   - `04_globi_gbif_taxonomic_overlap.ipynb`
+   All executed in-place with 0 errors and full graphical/tabular outputs preserved.
+7. Publication Figures (300 DPI) Generated in `reports/phase_4/figures/`:
+   - `globi_records_by_region.png`
+   - `globi_interaction_types_breakdown.png`
+   - `globi_temporal_distribution.png`
+   - `globi_spatial_cell_occupancy.png`
+   - `globi_gbif_taxonomic_overlap.png`
+8. Comprehensive Phase 4 Investigation & Download Plan Report:
+   - Created `reports/phase_4/globi_investigation_and_download_plan.md` covering all 14 required sections with PASS / PASS WITH CAVEATS ratings.
+   - Recommended targeted regional harvesting (~18 MB, 9,048 records) rather than downloading the unwieldy 10 GB global dump.
+9. Updates to Project Registers:
+   - Updated `dataset_inventory.csv` and `regional_availability_matrix.csv`.
+   - Updated `notebooks/phase_4_globi/README.md`.
+10. Strict Stopping Rules Observed:
+   - ZERO synthetic data used or generated.
+   - Halted before writing raw regional download files to `data/raw/globi/`.
+   - Zero ESA WorldCover or model code executed.
+   - Local execution only; zero git push.
+
+--------------------------------------------------------------------------------
+================================================================================
+USER INTERACTION: Phase 4 GloBI Final Scientific Validation
+TIMESTAMP: 2026-11-04T07:17:00+05:30
+================================================================================
+
+ACTIONS & DELIVERABLES:
+1. Coordinate Provenance Audit:
+   - iNaturalist Citizen Science (85.0% of data): Point coordinates recorded via smartphone/camera GPS (~5-30m accuracy); supports direct 5 km cell assignment.
+   - CarniDIET 1.0 (7.6% of data, 684 records in Nilgiri-Bandipur): Exactly two reserve-level centroids: Bandipur (11.7833, 76.4833) and Mudumalai (11.6250, 76.5583); spatial grain is 300-900 km2; strictly incompatible with 5 km grid cell assignment.
+   - Museum Vouchers (5.3% of data: Ecdysis, MycoPortal, UMMZ): Historical institutional locality coordinates (1942-1985).
+2. CarniDIET 1.0 Spatial & Temporal Truth:
+   - Sourced from two published scat surveys: Andheria et al. (2007) in Bandipur (292 records) and Ramesh et al. (2012) in Mudumalai (392 records).
+   - Ingested twice by GloBI from two GitHub repositories (CarniDIET-Database and GEB-2021-CarniDIET_database), creating exact 2x duplicates.
+   - De-duplicated to exactly 86 unique predator-prey relationships.
+   - Assigned strictly to Category B (Regional Trophic Scaffold); prevented from causing artificial spatial concentration in single 5 km cells.
+3. Bidirectional Deduplication & Math Discrepancy Reconciliation:
+   - Reconciled why 9,044 / 2 = 4,522 vs 4,524:
+     - Asymmetric directional pairs: 6,124 records = exactly 3,062 pairs.
+     - Symmetric heterospecific pairs: 2,916 records = exactly 1,458 pairs.
+     - Symmetric conspecific self-interactions (Euchrysops cnejus, Danaus chrysippus): 4 records = exactly 2 pairs.
+     - Total reciprocal pairs inside polygon = 3,062 + 1,458 + 2 = exactly 4,522 canonical events!
+     - The 4,524 figure represents total bounding box records divided by 2 (9,048 / 2 = 4,524), including 2 pairs in peripheral slivers.
+4. GBIF Taxonomic Endpoint Matching:
+   - Audited canonical interaction edges against 3,964 GBIF species:
+     - Both endpoints match GBIF: 2,147 edges (49.6%).
+     - One endpoint matches GBIF: 2,028 edges (46.8%).
+     - Neither endpoint matches GBIF: 156 edges (3.6%).
+     - Both co-occur in same study region in GBIF: 2,107 edges (48.6%).
+     - Both have temporally compatible occurrences in same region: 2,063 edges (47.6%).
+5. Temporal Semantics & VIIRS Alignment:
+   - iNaturalist: Actual encounter dates (62.0% in BLR, 60.7% in MYS align with 2012-2024).
+   - CarniDIET: Study publication/compilation epoch years (2006, 2008).
+   - Museum Vouchers: Historical specimen collection dates (1942-1985).
+6. Final 3-Tier Acquisition Classification:
+   - Category A (Contemporary Empirical 2012-2024): 5,154 records (4,476 BLR, 574 MYS, 104 NB).
+   - Category B (Regional Trophic Scaffold): 3,890 records (684 CarniDIET, 484 museum vouchers, 2,722 non-2012-2024).
+   - Category C (Excluded boundary slivers): 4 records.
+7. Deliverables Created & Updated:
+   - Created and executed `notebooks/phase_4_globi/05_globi_final_scientific_validation.ipynb` (outputs preserved).
+   - Created `reports/phase_4/globi_final_scientific_validation_report.md`.
+   - Updated `reports/phase_4/globi_investigation_and_download_plan.md`.
+   - Updated `notebooks/phase_4_globi/README.md`.
+   - Generated 3 new 300 DPI publication figures.
+8. Strict Stopping Rules Observed:
+   - Zero bulk data written to `data/raw/globi/`.
+   - Zero synthetic data fabricated.
+   - Local execution only; zero git push.
+   - Halted awaiting user approval for acquisition.
+
+--------------------------------------------------------------------------------
+================================================================================
+USER INTERACTION: Phase 4 GloBI Final Count Reconciliation & Download Readiness
+TIMESTAMP: 2026-11-04T07:39:30+05:30
+================================================================================
+
+ACTIONS & RECONCILIATION FINDINGS:
+1. Reconcile 4,522 vs 4,331 Canonical Edges (191-Edge Discrepancy Resolved):
+   - Total records inside 50 km study polygons: 9,044.
+   - Reciprocal halving yields exactly 4,522 canonical interaction events (3,062 asymmetric pairs + 1,458 heterospecific symmetric pairs + 2 conspecific self-interaction pairs).
+   - 100% of these 4,522 edges have valid source and target taxon names (zero missing identifiers).
+   - Exactly 191 symmetric pairs shared the exact same spatiotemporal signature (region, lat, lon, date, sorted_taxa) with an existing pair.
+   - Collapsing these 191 duplicate symmetric observation instances yielded 4,331 unique spatiotemporal edges (3,062 asymmetric + 1,269 unique symmetric).
+   - Math reconciled: 4,522 - 191 = 4,331.
+2. Reconcile CarniDIET Duplication & Provenance:
+   - 684 raw imported rows from GloBI.
+   - 342 rows from GEB-2021-CarniDIET_database and 342 rows from CarniDIET-Database (100% clone across the two GitHub repos).
+   - De-duplicating repository clones yields 172 unique scientific assertions (86 eats + 86 eatenBy).
+   - Bandipur site (Andheria et al. 2007, centroid 11.7833, 76.4833): 33 distinct predator-prey pairs across 73 forward rows.
+   - Mudumalai site (Ramesh et al. 2012, centroid 11.6250, 76.5583): 53 distinct predator-prey pairs across 98 forward rows.
+   - 22 pairs are shared between both sites (e.g. Tiger preying on Chital).
+   - Net landscape-level unique biological relationships: 86 - 22 = 64 distinct predator-prey pairs across Leopard (23), Dhole (21), and Tiger (20).
+   - Sourced from scat hair analysis; reserve-level grain (300-900 km2); strictly classified as Category B (Regional Trophic Scaffold) and never assigned to 5 km cells as point observations.
+3. Verification of the 7,690 Point Coordinates:
+   - GloBI does NOT expose Darwin Core coordinateUncertaintyInMeters or geoprivacy flags.
+   - Evaluated against source metadata: Decimal precision cannot be used to infer GPS accuracy.
+   - Honest 4-Tier Spatial Precision Classification:
+     * A. Documented Positional Accuracy: 0 records (unreported by GloBI).
+     * B. Point Location with Unknown Precision: 7,690 records (iNaturalist encounters).
+     * C. Known Generalised / Reserve Centroid: 696 records (684 CarniDIET + 12 SquamataBase/literature).
+     * D. Historic Locality / Unclassified: 662 records (480 museum vouchers + 182 literature/archive).
+4. Reconcile 5,160 vs 5,154 Temporal Counts (6-Record Sequence):
+   - Total records with event_date in 2012-2024: 5,160.
+   - Deduction 1: 2 records lie outside study polygon in bounding-box corner slivers (assigned to Category C).
+   - Deduction 2: 4 records from SquamataBase (Grundler, 2020) documenting Cobra diet from literature notes (assigned to Category B).
+   - Math reconciled: 5,160 - 2 (outside polygon) - 4 (SquamataBase literature) = 5,154 Category A records.
+5. Three-Tier Data Structure Preserved:
+   - Category A (Contemporary Empirical 2012-2024): 5,154 records.
+   - Category B (Regional Trophic Scaffold): 3,890 records.
+   - Category C (Excluded boundary slivers): 4 records.
+   - Total = 5,154 + 3,890 + 4 = 9,048 records (100% exact).
+6. Deliverables Updated:
+   - Re-executed notebooks/phase_4_globi/05_globi_final_scientific_validation.ipynb (0 errors).
+   - Updated reports/phase_4/globi_final_scientific_validation_report.md.
+   - Updated reports/phase_4/globi_investigation_and_download_plan.md.
+   - Updated dataset_inventory.csv and regional_availability_matrix.csv.
+7. Stopping Rule:
+   - All bulk downloads, file writing to data/raw/globi/, EDA, and modeling halted.
+   - GloBI certified as READY FOR REGIONAL ACQUISITION awaiting user authorization.
+
+--------------------------------------------------------------------------------
