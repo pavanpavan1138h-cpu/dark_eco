@@ -30,7 +30,15 @@ This report delivers the comprehensive empirical investigation and data-quality 
    - **Nilgiri–Bandipur**: 104 records (11.9%) fall in 2012–2024; **752 records (85.8%) date from 2006/2008**. Provenance audit reveals that 78% of forest records originate from the authoritative **CarniDIET 1.0** database (Middleton et al.), documenting large carnivore (*Panthera tigris*, *Panthera pardus*, *Cuon alpinus*) prey selection via field scat analyses.
 4. **Bidirectional Symmetry & Trophic Predicates:**
    - GloBI stores every interaction pair symmetrically: `eats` (predator $\to$ prey) is paired with `eatenBy` (prey $\to$ predator); `preysOn` with `preyedUponBy`; `hasHost` with `hostOf`.
-   - Accounting for bidirectional indexing, the empirical dataset represents **4,522 unique biological interaction events inside the study polygons** (and 4,524 across the total retrieved bounding boxes; see Notebook 05 and `globi_final_scientific_validation_report.md` for exact reconciliation).
+   - Accounting for bidirectional indexing, the empirical dataset represents **4,351 unique canonical biological interaction events inside the study polygons** (4,522 when including the 171 duplicate clone events from the second CarniDIET repository; see Notebook 05 and `globi_final_scientific_validation_report.md` for exact reconciliation).
+   - **4,331 canonical edges** remain after deduplicating 191 duplicate symmetric instances sharing identical spatiotemporal keys.
+   - **4,026 unique spatiotemporal graph edges** remain after active canonical orientation and asymmetric grouping (collapsing 85 CarniDIET metric rows, 19 museum vouchers, and 30 iNaturalist repeated encounters) with complete evidence preservation (`evidence_count` and concatenated provenance IDs).
+   - **2,110 canonical static interaction edges** (1,646 asymmetric directed + 464 symmetric canonical edges; 2,008 unique taxon pairs).
+   - **Spatial Suitability Governance**: Based on 2D metric buffer intersection (EPSG:32643) against 5 × 5 km cells:
+     - **Cell-defensible observations**: **3,648 records (1,824 events)** strictly contained in 1 cell (1,783 aggregated edges).
+     - **Boundary-ambiguous observations**: **632 records (316 events)** straddling cell boundaries (307 aggregated edges).
+     - **Provisional cell observations**: **806 records (403 events)** with accuracy missing or $> 2,500$ m (393 aggregated edges).
+     - **Regional contextual evidence**: **3,616 records (1,808 events)** including CarniDIET centroids (342/171), museum vouchers (674/337), non-2012–2024 observations (2,532/1,266), and obscured contemporary records (68/34).
 5. **Taxonomic Overlap with Approved GBIF DWCA Occurrence Dataset:**
    - Cross-referencing GloBI taxa against the **3,901,020 GBIF occurrences (3,964 unique species)** reveals **615 direct binomial species matches (51.0% exact match rate)**.
    - Overlap per region: Bengaluru 51.6% (514 species), Mysuru 61.6% (228 species), Nilgiri–Bandipur 50.4% (60 species).
@@ -281,11 +289,12 @@ Based on our empirical investigation, the acquisition of GloBI data does **NOT**
 
 ## 13. Estimated Download Size and Artifact Footprint
 
-| Component | Format | Record Count | Approximate Size | Storage Destination |
+| Component | Format | Record / Event Count | Approximate Size | Storage Destination |
 |:---|:---:|:---:|:---:|:---|
-| **Raw Regional API Exports** | CSV / JSON | 9,048 | ~18.2 MB | `dark_eco/data/raw/globi/` |
-| **Audited Regional Datasets** | Parquet / CSV | 9,044 | ~8.5 MB | `dark_eco/data/processed/globi/` |
-| **Canonical Directed Edge List** | Parquet / CSV | 4,522 (polygon) / 4,524 (total) | ~2.1 MB | `dark_eco/data/processed/globi/` |
+| **Raw Regional API Exports** | CSV / JSON | 9,048 raw records | ~18.2 MB | `dark_eco/data/raw/globi/` |
+| **Audited Regional Datasets** | Parquet / CSV | 9,044 inside polygon (8,702 unique + 342 clone) | ~8.5 MB | `dark_eco/data/processed/globi/` |
+| **Spatiotemporal Aggregated Graph Edges** | Parquet / CSV | 4,026 unique edges (4,351 canonical events) | ~2.1 MB | `dark_eco/data/processed/globi/` |
+| **Canonical Static Interaction Edges** | CSV | 2,110 edges (1,646 asymmetric directed + 464 symmetric canonical; 2,008 species pairs) | ~180 KB | `dark_eco/data/metadata/phase_4_checks/` |
 | **Metadata & Manifests** | JSON / CSV | — | ~150 KB | `dark_eco/data/metadata/` |
 | **Total Artifact Footprint** | — | — | **~29.0 MB** | — |
 

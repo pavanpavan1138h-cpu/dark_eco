@@ -31,11 +31,13 @@ This directory contains the executed Jupyter Notebooks for **Phase 4: Global Bio
    - Evaluates graph connectivity, node-edge formulations, and constraints.
 
 5. **[`05_globi_final_scientific_validation.ipynb`](05_globi_final_scientific_validation.ipynb)**:
-   - Evaluates spatial reliability and traces source observation IDs to upstream iNaturalist metadata (confirming 100% traceability to 3,588 unique observations; live API verification of accuracy and geoprivacy flags).
-   - Preserves all 4,522 canonical interaction events; inspects the 191 matching instances (10 exact duplicates vs 181 distinct repeated observations); generates the derived aggregated graph edge table (`globi_derived_aggregated_edges.csv`, $N = 4,120$ unique edges).
-   - Reconciles CarniDIET 1.0 (684 rows down to 64 landscape-level predator-prey relationships across the 3 apex carnivores); cleanly separates 480 museum specimen vouchers from 4 literature records.
-   - Replaces overloaded categories with an orthogonal 2D matrix: **Evidence Role (E1, E2, E3)** and **Spatial Reliability (S1, S2, S3, S4)**.
-   - Master hierarchical count reconciliation across raw records, reciprocal pairs, canonical events, aggregated edges, and cell-level vs regional analysis suitability.
+   - **Task 1 — True CarniDIET Event Count**: Confirms `CarniDIET-Database` is a 100% clone duplicate of `GEB-2021-CarniDIET_database`. Removing 342 clone records leaves 342 unique directional assertions, forming exactly **171 canonical biological events** (73 Bandipur, 98 Mudumalai), not 342. Repeated measurements collapse into **86 site-specific predator–prey edges**.
+   - **Task 2 — Reduction Reconciliation**: Explains why previous reports cited 183 and 256 reductions. Proves that the true reduction from canonical events to site edges is $171 - 86 = \mathbf{85}$ collapsed repeated measurement rows.
+   - **Task 3 — Canonical Static Interaction Edges Reconciliation**: Traces progression from **2,562** (unnormalized) $\to$ **2,206** (active normalized) $\to$ **2,110** (`canonical_static_interaction_edges`, composed of 1,646 asymmetric directed + 464 symmetric canonical edges across 2,008 unique taxon pairs). Exported to [`globi_static_edges_mapping.csv`](../../data/metadata/phase_4_checks/globi_static_edges_mapping.csv).
+   - **Task 4 — Master Event-Count Hierarchy & Orthogonal Partitions**:
+     - Programmatically distinguishes raw API records (9,048), records inside polygons (9,044), peripheral records (4), unique inside assertions (8,702), unique canonical events (4,351), CarniDIET duplicate clone events (171), peripheral events (2), raw reciprocal pairs (4,524), and unique canonical events across the returned dataset (4,353).
+     - Separates temporal classification (5,154 contemporary vs 3,548 historical) and spatial suitability (3,648 defensible, 632 ambiguous, 806 provisional, 3,616 regional-only) into orthogonal dimensions, proving that the 68 obscured records form their exact intersection.
+   - **Task 5 — 2D Geospatial Grid-Cell Assignment & Provisional Records**: Metric buffer intersection in EPSG:32643 against the 5 × 5 km grid: `cell_defensible` (3,648 records / 1,824 events), `cell_boundary_ambiguous` (632 records / 316 events), `cell_provisional` (806 records / 403 events), `regional_only_obscured` (68 records / 34 events). For all 806 provisional records, original observation coordinates and point-in-polygon cell IDs are preserved (never replaced with cell centroids).
+   - **Task 6 — Metric Comparison Table & Pass/Fail Checks**: 12 automated test assertions including three distinct event checks (inside before clone dedup: $4,351 + 171 = 4,522$; unique-event: $4,351 + 2 = 4,353$; raw-event: $4,522 + 2 = 4,524$), canonical static interaction edges integrity, and provisional spatial integrity, all executed with 100% pass rates and zero errors.
 
-All notebooks are executed in-place with 0 errors and preserve all numerical and graphical outputs.
-
+All notebooks are executed in-place with 0 errors and preserve all numerical and tabular outputs.

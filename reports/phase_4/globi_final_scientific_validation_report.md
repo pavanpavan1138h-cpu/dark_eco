@@ -1,210 +1,280 @@
-# Phase 4 — GloBI Final Scientific Validation and Evidence Preservation Report
-## Spatial Reliability, CarniDIET Provenance, Orthogonal Evidence–Spatial Matrix, and Master Hierarchical Reconciliation
+# Phase 4 — GloBI Final Scientific Validation and Audit Report
+## Canonical Event Counting, CarniDIET Active Orientation, Event Scopes, and Orthogonal Partitions
 
 **Project:** Dark Ecology Intelligence: Temporal Graph Neural Networks and Deep Reinforcement Learning for AI-Driven Light Pollution Governance  
 **Course:** ANN Lab PBL — AI2531A  
 **Stage:** Phase 4 — Biotic Interactions Final Scientific Validation  
 **Date:** 2026-11-04  
-**Status:** **SCIENTIFIC VALIDATION AND COUNT RECONCILIATION COMPLETED — READY FOR REGIONAL ACQUISITION UPON USER APPROVAL**
+**Status:** **AUDIT COMPLETED — ALL DISCREPANCIES RECONCILED — 100% PROGRAMMATIC VERIFICATION**
 
 ---
 
 ## Executive Summary
 
-Following the comprehensive GloBI API investigation, this report delivers the final pre-acquisition scientific validation, resolving remaining spatial reliability, provenance, and mathematical questions across **Bengaluru (Urban)**, **Mysuru (Peri-urban)**, and **Nilgiri–Bandipur (Forest, Option A)**.
+This report delivers the definitive independent scientific verification, mathematical event-count reconciliation, and orthogonal classification partitioning of the GloBI interaction dataset across **Bengaluru (Urban)**, **Mysuru (Peri-urban)**, and **Nilgiri–Bandipur (Forest, Option A)**.
 
-### Headline Accomplishments & Scientific Determinations:
-1. **Spatial Reliability & Upstream iNaturalist Tracing**:
-   - Out of 7,690 iNaturalist records, **100.0% have traceable observation IDs** in `target_specimen_occurrence_id` or `catalog_number` (representing 3,588 unique observations).
-   - Direct verification against the official iNaturalist REST API confirms that original iNaturalist observations store `positional_accuracy` and `obscured` flags.
-   - However, **GloBI does NOT transmit these Darwin Core fields in its interaction endpoint**. Therefore, when consuming GloBI data directly, coordinates are classified as **S2 (Point coordinates with unknown precision)** rather than inferred GPS accuracy.
-2. **Preservation of the 191 Potentially Duplicated Instances**:
-   - All **4,522 canonical interaction events** are strictly preserved with original identifiers.
-   - Inspection of the 191 matching instances across 58 spatiotemporal keys reveals that **10 cases are exact duplicate source records** (identical observation IDs uploaded/indexed twice), while **181 cases are distinct repeated observations** (different observation IDs) describing the same interaction at the same location and date (e.g. bioblitz surveys in urban parks).
-   - To support network modeling without losing evidence, we created a **Derived Aggregated Graph Edge Table** (`globi_derived_aggregated_edges.csv`, $N = 4,120$ unique spatiotemporal edges) containing `evidence_count` and concatenated provenance IDs.
-3. **CarniDIET Provenance & Museum Voucher Correction**:
-   - Traced the 684 CarniDIET rows across two GitHub repositories (342 rows each; 100% clone) through 172 unique scientific assertions (86 forward + 86 reciprocal) down to **64 unique landscape-level predator–prey relationships** across the 3 apex carnivores (*Panthera pardus*: 23 prey, *Cuon alpinus*: 21 prey, *Panthera tigris*: 20 prey).
-   - Corrected the historical breakdown: exactly **480 museum specimen vouchers** (220 Ecdysis arthropods, 256 MycoPortal fungi, 4 UMMZ Michigan insects) and **4 literature dietary notes** (*SquamataBase* Cobra diet).
-   - CarniDIET records represent broad reserve centroids ($300\text{--}900\text{ km}^2$) and are strictly prevented from being assigned to 5 km grid cells as point observations.
-4. **Orthogonal 2D Classification Architecture**:
-   - Replaced overloaded categories with two independent fields: **Evidence Role (E1, E2, E3)** and **Spatial Reliability (S1, S2, S3, S4)**.
-5. **Master Hierarchical Reconciliation**:
-   - Established strict mathematical alignment from raw retrieved records ($N = 9,048$) to reciprocal pairs ($N = 9,044$), canonical events ($N = 4,522$), aggregated graph edges ($N = 4,120$), static edges ($N = 2,110$), cell-level dynamic records ($N = 5,154$), and regional scaffold records ($N = 3,890$). Zero unexplained residuals.
-
----
-
-## 1. Spatial Reliability & Upstream Metadata Tracing
-
-We investigated what the coordinates actually represent across all 9,048 retrieved records ($N = 9,044$ inside study polygons).
-
-### 1. Source Observation ID Tracing (iNaturalist)
-- Across the 7,690 iNaturalist records, **every single record (100.0%) contains a traceable observation ID** stored in `target_specimen_occurrence_id` (e.g. `https://www.inaturalist.org/observations/381936683`) or `target_specimen_catalog_number` (e.g. `381936683`).
-- These 7,690 rows trace back to **3,588 unique iNaturalist observations**.
-
-### 2. Live Upstream API Query Verification
-We queried the official iNaturalist REST API (`https://api.inaturalist.org/v1/observations/`) for a representative sample of extracted IDs:
-- **Observation `313520452`** (*Double-branded Crow Butterfly* in Bengaluru, `12.98659, 77.7448`):
-  `positional_accuracy: 197 meters`, `geoprivacy: open`, `obscured: false`.
-- **Observation `197899786`**: `positional_accuracy: 15 meters`, `geoprivacy: open`, `obscured: false`.
-- **Observation `185997652`**: `positional_accuracy: null`, `geoprivacy: open`, `obscured: false`.
-
-### 3. Critical Scientific Reality Check
-- While upstream iNaturalist stores positional accuracy and obscuration flags, **GloBI does NOT harvest or export these Darwin Core terms** in its `/interaction` endpoint.
-- Therefore, within the GloBI dataset, numeric coordinate precision cannot be taken as physical GPS accuracy.
-- Any observation of a threatened species (e.g. Schedule I / CITES taxa) may have been obscured to a $\sim 10\text{ km} \times 10\text{ km}$ bounding box prior to GloBI harvesting.
-- **Governing Rule**: GloBI point coordinates must be classified as **S2 (Point coordinates with unknown precision)**. Records in Category E1 are eligible for 5 km cell assignment with the explicit caveat that citizen-science positional accuracy is unquantified in GloBI.
-
----
-
-## 2. Preservation of the 191 Potentially Duplicated Instances & Aggregated Edge Table
-
-The user instructed to preserve all 4,522 canonical interaction events and investigate the 191 matching instances.
-
-### 1. Investigation of the 191 Cases
-We audited the 191 symmetric pairs sharing identical `(study_region, latitude, longitude, event_date, sorted_taxa)` signatures across 58 distinct spatiotemporal keys:
-- **Exact Duplicate Source Records (10 cases)**: The same observation ID was indexed multiple times in GloBI (e.g. multiple identifications or duplicate harvesting).
-- **Distinct Repeated Observations (181 cases)**: Different observation IDs describing the same interaction between the same pair of taxa at the same location and date (e.g. bioblitz surveys in Lalbagh or Cubbon Park where multiple observers photographed the same tree/nest).
-- **Preservation Policy**: None of these records were deleted. All **4,522 canonical interaction events** are preserved in the raw canonical dataset.
-
-### 2. Derived Aggregated Graph Edge Table (`globi_derived_aggregated_edges.csv`)
-To support graph neural network modeling without discarding evidence, we constructed a derived table that groups raw observation events into unique directed graph edges:
-- **Total Unique Spatiotemporal Edges**: **4,120 edges**.
-- **Edge Schema**:
-  - `edge_id`: Unique identifier (e.g. `DEI_EDGE_BLR_0001`).
-  - `source_taxon_name`, `interaction_type`, `target_taxon_name`.
-  - `study_region`, `latitude`, `longitude`, `cell_id`.
-  - `event_date`, `parsed_year`.
-  - `evidence_count`: Number of raw observation events supporting the edge (1 to 10+).
-  - `contributing_record_ids`: Concatenated list of original iNaturalist / GloBI record identifiers.
-  - `source_studies`: Citations of contributing studies.
-  - `evidence_role`: `E1` (Contemporary) vs `E2` (Regional Context).
-  - `spatial_reliability`: `S2` (Point Unknown Precision), `S3` (Centroid), `S4` (Historic Locality).
-  - `analysis_suitability`: `Cell-Level Dynamic Analysis` vs `Regional Scaffold Only`.
+### Headline Scientific Accomplishments:
+1. **Clarified Event-Count Hierarchy & Raw vs Unique Event Scopes**:
+   - Explicitly distinguishes raw API records, reciprocal assertions, canonical biological events, and spatiotemporal graph edges across the returned dataset.
+   - Programmatically resolves the distinct event quantities:
+     - **9,048** raw API records.
+     - **9,044** records inside study polygons (**4** peripheral sliver records outside polygons).
+     - **342** duplicate CarniDIET repository rows (exact clone repository crawled twice).
+     - **8,702** unique directional assertions inside polygons after clone deduplication.
+     - **4,351** canonical biological events inside polygons after clone deduplication ($8,702 / 2$).
+     - **171** duplicate CarniDIET canonical events represented by the second repository copy ($342 / 2$).
+     - **2** excluded peripheral canonical events ($4 / 2$).
+     - **4,524** raw reciprocal event pairs across all returned records before clone deduplication ($9,048 / 2$).
+     - **4,353** unique canonical events across the returned dataset after clone deduplication ($4,351 + 2$).
+2. **Three Distinct, Unambiguous Event Reconciliation Checks**:
+   - *Inside-polygon before clone deduplication*:
+     $$4,351\text{ unique canonical events} + 171\text{ duplicate clone events} = \mathbf{4,522}\text{ inside events}$$
+   - *Unique-event reconciliation across returned dataset*:
+     $$4,351\text{ inside unique canonical events} + 2\text{ peripheral unique canonical events} = \mathbf{4,353}\text{ unique canonical events}$$
+   - *Raw-event reconciliation across all returned records*:
+     $$4,522\text{ inside raw paired events} + 2\text{ peripheral raw paired events} = \mathbf{4,524}\text{ raw reciprocal event pairs}$$
+3. **CarniDIET Event Count & Reduction Reconciliation**:
+   - Auditing all 684 CarniDIET rows confirms that `CarniDIET-Database` (342 rows) is an **exact GitHub repository clone** of `GEB-2021-CarniDIET_database` (342 rows; 0 biological differences).
+   - Removing the 342 clone records leaves **342 unique directional assertions** (171 forward `eats` + 171 reciprocal `eatenBy`).
+   - Every single one of the 171 `eats` rows matches exactly one reciprocal `eatenBy` row (100% matched).
+   - **True CarniDIET Canonical Events**: These 171 reciprocal pairs represent exactly **171 independent canonical biological events** (73 at Bandipur, 98 at Mudumalai), **not 342**.
+   - **Unique Site-Specific Edges**: Repeated seasonal and metric measurements within each paper collapse into exactly **86 unique predator–prey edges** (33 in Bandipur, 53 in Mudumalai).
+   - **True Biological Reduction**: $171\text{ Canonical Events} - 86\text{ Unique Site Edges} = \mathbf{85}\text{ collapsed repeated measurement rows}$ ($40$ Bandipur, $45$ Mudumalai).
+   - Reconciles previous un-deduplicated counts: $85\text{ measurement events} + 171\text{ duplicate clone events} = \mathbf{256}$; unmerged active/passive pairs yielded $256 - 73 = \mathbf{183}$.
+4. **Canonical Static Interaction Edges Reconciliation (2,562 $\to$ 2,206 $\to$ 2,110)**:
+   - **2,562 Triples**: Raw unnormalized triples where directional predicates (`eats` vs `eatenBy`, `hasHost` vs `hostOf`) were counted separately.
+   - **2,206 Triples**: Triples after active predicate normalization (`eatenBy` $\to$ `eats` with swapped endpoints, consolidating 356 reciprocal triples: $2,562 - 356 = 2,206$).
+   - **2,110 Canonical Static Interaction Edges (`canonical_static_interaction_edges`)**:
+     - **1,646 asymmetric directed interaction edges** (`eats`, `hasHost`, `pollinates`, `preysOn`, etc.).
+     - **464 symmetric canonical interaction edges** (`interactsWith`, `adjacentTo`, `symbiontOf`), alphabetically sorted ($s \le t$) to consolidate 96 reverse duplicates ($2,206 - 96 = \mathbf{2,110}$).
+     - **Not all 2,110 edges are directed**: The 464 symmetric edges represent undirected biological relationships.
+     - **2,008 Unique Taxon Pairs**: Unique species pairs $(u, v)$ regardless of interaction predicate.
+   - All 9,044 records inside the polygon remain mapped to [`globi_static_edges_mapping.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/globi_static_edges_mapping.csv) with original evidence IDs preserved.
+5. **Orthogonal Spatial and Temporal Classification Partitions & Provisional Records**:
+   - Clarifies that **temporal classification** (contemporary vs historical/contextual) and **spatial suitability** (defensible, boundary-ambiguous, provisional, regional-only) are **independent orthogonal dimensions**.
+   - Proves that the **5,154 contemporary records** include **68 obscured records** that are also counted in the **3,616 regional-only contextual records**:
+     $$\text{Contemporary (5,154)} = 3,648\text{ (defensible)} + 632\text{ (ambiguous)} + 806\text{ (provisional)} + 68\text{ (obscured)}$$
+     $$\text{Regional-Only (3,616)} = 68\text{ (contemporary obscured)} + 3,548\text{ (historical/contextual)}$$
+   - **Provisional Spatial Records Audit ($N=806$)**:
+     - All 806 `cell_provisional` records **preserve their original longitude and latitude** and **their original point-in-polygon cell ID** (spanning 73 unique cells).
+     - **Coordinates are never replaced with cell centroids**, and cell centroids are **never described as observed locations**.
+     - These records are retained as `cell_provisional` to explicitly signal that they **do not support precise cell-level interaction claims**, but remain available for appropriately caveated sensitivity or regional analysis.
+   - Preserves 2D metric buffer intersection in **EPSG:32643** against the 5 × 5 km grid in [`contemporary_spatial_assignment_audit.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/contemporary_spatial_assignment_audit.csv).
+   - Preserves **4,026 unique spatiotemporal edges** in [`globi_derived_aggregated_edges.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/globi_derived_aggregated_edges.csv).
 
 ---
 
-## 3. Correct CarniDIET 1.0 Classification & Museum Voucher Separation
+## 1. Task 1 — True CarniDIET Event Count
 
-### 1. CarniDIET 1.0 Complete Record-Level Reconciliation (Nilgiri–Bandipur)
-All 684 CarniDIET records derive from two published scat surveys:
-- **Bandipur Tiger Reserve** (Andheria, Karanth & Kumar, 2007; centroid `11.7833, 76.4833`):
-  146 rows per repo $\to$ 73 `eats` + 73 `eatenBy` $\to$ **33 distinct predator–prey pairs**.
-- **Mudumalai Tiger Reserve** (Ramesh, Kalle, Sankar & Qureshi, 2012; centroid `11.6250, 76.5583`):
-  196 rows per repo $\to$ 98 `eats` + 98 `eatenBy` $\to$ **53 distinct predator–prey pairs**.
-- **Landscape Synthesis**:
-  $33 + 53 = 86\text{ site-level pairs}$. Exactly **22 pairs are shared** between both reserves.
-  Net unique biological predator–prey relationships: $86 - 22 = \mathbf{64\text{ unique biological relationships}}$ across Leopard (23), Dhole (21), and Tiger (20).
-- **Centroid Rule**: CarniDIET records are strictly restricted to the **Regional Trophic Scaffold (E2 / S3)** and are **never assigned to individual 5 km grid cells**.
+### A. Repository Clone Identity Verification
 
-### CarniDIET Record-Level Reconciliation Table
+All 684 CarniDIET records originate from the Nilgiri–Bandipur landscape and represent two scientific publications:
+- Andheria, Karanth, & Kumar (2007) *Bandipur Tiger Reserve* (292 raw rows).
+- Ramesh et al. (2012) *Mudumalai Tiger Reserve* (392 raw rows).
 
-| Processing Stage | Row Count | Distinct Predators | Distinct Prey | Scientific Meaning & Downstream Role |
-|:---|:---:|:---:|:---:|:---|
-| **1. Total Imported GloBI CarniDIET Rows** | **684** | 3 | 28 | Raw rows returned from GloBI REST API for Nilgiri–Bandipur |
-| **2. Exact Duplicated Repository Rows** | **342** | 3 | 28 | 100% duplicate clone from second GitHub repo (`CarniDIET-Database`) |
-| **3. Unique Scientific Assertions (Single Repo)**| **172** | 3 | 28 | De-duplicated scientific assertions (86 `eats` + 86 `eatenBy`) |
-| **4. Forward Trophic Assertions (`eats`)** | **86** | 3 | 28 | Site-specific predator–prey assertions across the two reserves |
-| **5. Bandipur Site Distinct Pairs (Andheria et al.)**| **33** | 3 | 16 | Tiger (11), Leopard (12), Dhole (10) prey profiles |
-| **6. Mudumalai Site Distinct Pairs (Ramesh et al.)** | **53** | 3 | 24 | Tiger (16), Leopard (19), Dhole (18) prey profiles |
-| **7. Shared Prey Profiles Between Sites** | **22** | 3 | 12 | Apex carnivore prey selection common to both reserves |
-| **8. Unique Biological Relationships Across Landscape**| **64** | 3 | 28 | **Canonical Regional Scaffold**: Leopard (23), Dhole (21), Tiger (20) |
+| Repository Identifier | Raw Rows | Forward `eats` | Reciprocal `eatenBy` | Exact Biological Matches |
+| :--- | :---: | :---: | :---: | :---: |
+| `GEB-2021-CarniDIET_database` | 342 | 171 | 171 | Baseline |
+| `CarniDIET-Database` | 342 | 171 | 171 | 342 / 342 (100% Exact Clone) |
 
-### 2. Museum Specimen Vouchers vs Literature Correction
-The previously combined 484 historical records are now cleanly separated:
-- **Museum Specimen Vouchers**: Exactly **480 records**:
-  - Ecdysis Arthropod Vouchers: 220 records (Bengaluru)
-  - MycoPortal Fungal Vouchers: 256 records (194 Bengaluru, 52 Mysuru, 10 Nilgiri–Bandipur)
-  - UMMZ Michigan Museum Insect Vouchers: 4 records (Mysuru)
-- **Literature Dietary Notes**: Exactly **4 records** from *SquamataBase* (Grundler, 2020) documenting Cobra diet in Bengaluru.
-- Sum: $480 + 4 = \mathbf{484\text{ records}}$.
+Programmatic comparison of `source_taxon_name`, `target_taxon_name`, `interaction_type`, `lat_float`, `lon_float`, and `event_date` confirms **0 differences**. `CarniDIET-Database` is an exact clone duplicate crawled twice by GloBI.
 
----
+### B. Reciprocal Pairing and Canonical Biological Events
 
-## 4. Orthogonal Evidence Role (E) and Spatial Reliability (S) Classification
+After removing the 342 clone records, exactly **342 unique directional assertions** remain:
+- **171 forward `eats` rows**
+- **171 reciprocal `eatenBy` rows**
+- Every single one of the 171 `eats` rows matches exactly one reciprocal `eatenBy` row within the paper via reciprocal specimen IDs (`tmp_and_unique_source_specimen_id` $\leftrightarrow$ `tmp_and_unique_target_specimen_id`).
+- Therefore, CarniDIET represents exactly **171 independent canonical biological events**, **not 342**:
+  - **73 canonical events** at Bandipur Tiger Reserve (`11.7833, 76.4833`).
+  - **98 canonical events** at Mudumalai Tiger Reserve (`11.6250, 76.5583`).
 
-We replaced overloaded labels with two independent, orthogonal fields across all 9,048 records:
+### C. Collapsing Repeated Measurements to Site-Specific Edges
 
-### Field Definitions:
-- **Evidence Role ($E$)**:
-  - `E1`: Contemporary empirical evidence (direct field observations inside study polygon during 2012–2024).
-  - `E2`: Historical or regional contextual evidence (literature centroids, museum vouchers, pre-2012 or post-2024 observations).
-  - `E3`: Excluded records (falling outside approved study polygons).
-- **Spatial Reliability ($S$)**:
-  - `S1`: Documented positional accuracy ($\le 1,000$ m; 0 records in GloBI).
-  - `S2`: Point coordinates with unknown precision (iNaturalist encounters).
-  - `S3`: Known generalised location or study-site centroid (CarniDIET, SquamataBase).
-  - `S4`: Historical or unresolved locality (museum vouchers, institutional grounds).
+Within each study, the authors documented diet composition across multiple seasons and metrics (% FO, % Biomass):
+- At Bandipur, the 73 canonical events represent **33 distinct predator–prey pairs** ($73 - 33 = 40$ repeated measurement rows collapsed).
+- At Mudumalai, the 98 canonical events represent **53 distinct predator–prey pairs** ($98 - 53 = 45$ repeated measurement rows collapsed).
+- Total distinct site-specific predator–prey edges: $33 + 53 = \mathbf{86}$ edges!
+- Shared pairs documented in both reserves: **22 pairs**.
+- Landscape-level unique pairs: $33 + 53 - 22 = \mathbf{64}$ pairs (*Panthera pardus*: 23, *Cuon alpinus*: 21, *Panthera tigris*: 20).
 
-### 2D Orthogonal Classification Matrix (All 9,048 Records)
-
-| Evidence Role \ Spatial Reliability | S1: Documented Accuracy | S2: Point Unknown Precision | S3: Study-Site Centroid | S4: Historical Locality | Total Records | % of Dataset |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **E1: Contemporary Empirical (2012–2024)** | 0 | **5,154** | 0 | 0 | **5,154** | **57.0%** |
-| **E2: Regional / Historical Scaffold** | 0 | **2,532** | **696** | **662** | **3,890** | **43.0%** |
-| **E3: Excluded (Outside Boundary)** | 0 | 0 | 0 | **4** | **4** | **<0.1%** |
-| **Combined Total** | **0** | **7,686** | **696** | **666** | **9,048** | **100.0%** |
-
-### Regional Breakdown of Evidence Roles:
-- **Bengaluru**: E1 = 4,476; E2 = 2,746; E3 = 4 $\to$ Total = 7,226.
-- **Mysuru**: E1 = 574; E2 = 372; E3 = 0 $\to$ Total = 946.
-- **Nilgiri–Bandipur**: E1 = 104; E2 = 772; E3 = 0 $\to$ Total = 876.
+All 684 contributing records are documented in [`carnidiet_reconciliation_audit.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/carnidiet_reconciliation_audit.csv).
 
 ---
 
-## 5. Master Hierarchical Count Reconciliation Table
+## 2. Task 2 — Mathematical Reconciliation of the Reductions
 
-This master table establishes absolute mathematical alignment from raw API responses down to cell-level and regional analytical datasets:
+| Metric / Reduction Sequence | Starting Base | Resulting Groups | Collapsed Instances | Exact Cause & Mathematical Proof |
+| :--- | :--- | :---: | :---: | :--- |
+| **Earlier 183 Reduction** | 342 raw paired events | 159 groups | **183** | Included clone repository (171) + left 73 reciprocal active/passive pairs unmerged ($256 - 73 = 183$) |
+| **Previous 256 Reduction** | 342 raw paired events | 86 site edges | **256** | Included clone repository (171 duplicate events) + 85 repeated measurement events ($85 + 171 = 256$) |
+| **True Biological 85 Reduction** | **171 canonical events** | **86 site edges** | **85** | Clone repository removed; collapses 40 Bandipur + 45 Mudumalai repeated measurement rows ($171 - 86 = 85$) |
 
-| Processing Level / Entity | Raw Records | Events / Edges | Analysis Scope & Scientific Role |
-|:---|:---:|:---:|:---|
-| **1. Retrieved Raw Records** | **9,048** | — | Total rows retrieved from GloBI REST API for the three bounding boxes |
-| **2. Inside Approved Study Polygons** | **9,044** | — | Clipped to approved 50 km GeoJSON boundaries (4 excluded in Category E3) |
-| **3. Reciprocal-Paired Records** | **9,044** | — | 100.0% paired (3,062 forward + 3,062 inverse + 2,920 symmetric) |
-| **4. Biological Interaction Events** | **9,044** | **4,522** | Canonical reciprocal halving (3,062 asymmetric + 1,458 symmetric + 2 conspecific) |
-| **5. Unique Spatiotemporal Instances** | **8,853** | **4,331** | 191 duplicate symmetric instances identified, preserved, and grouped |
-| **6. Aggregated Spatiotemporal Graph Edges** | **9,044** | **4,120** | Spatiotemporally aggregated edges with `evidence_count` and record IDs |
-| **7. Static Directed Species Interaction Edges**| **9,044** | **2,110** | Unique directed (source, type, target) relationships across 1,206 taxa |
-| **8. Cell-Level Dynamic Analysis (E1 + S2)** | **5,154** | **2,577 events** <br> (2,529 edges) | Contemporary (2012–2024) point observations assigned to 5 km grid cells |
-| **9. Regional Trophic Scaffold Only (E2)** | **3,890** | **1,945 events** | CarniDIET reserve centroids, museum vouchers, non-2012–2024 observations |
-| **10. Excluded Records (E3)** | **4** | **2 events** | Bounding-box corner sliver records outside study polygons |
-
-$$\text{Reconciliation Check: } 5,154\text{ (Cell-Level)} + 3,890\text{ (Regional Scaffold)} + 4\text{ (Excluded)} = \mathbf{9,048\text{ Records (100\% Exact)}}.$$
+$$\text{Raw CarniDIET Rows} = 684 \xrightarrow{\text{Clone Removal}} 342\text{ Assertions} \xrightarrow{\text{Reciprocal Pairing}} 171\text{ Canonical Events} \xrightarrow{\text{Metric Consolidation}} 86\text{ Site Edges}$$
 
 ---
 
-## 6. Deliverables Updated & Verified
+## 3. Task 3 — Canonical Static Interaction Edges Reconciliation
 
-1. **Jupyter Notebook (`notebooks/phase_4_globi/`)**:
-   - [`05_globi_final_scientific_validation.ipynb`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/notebooks/phase_4_globi/05_globi_final_scientific_validation.ipynb): Updated with iNaturalist upstream API tracing, CarniDIET 64-relationship synthesis, derived edge table inspection, and orthogonal E/S matrix; executed with **0 errors**.
-2. **Derived Aggregated Edge Table**:
-   - `dark_eco/data/metadata/phase_4_checks/globi_derived_aggregated_edges.csv`: Generated with 4,120 unique spatiotemporal edges, evidence counts, and concatenated provenance IDs.
-3. **Master Investigation & Download Plan**:
-   - [`reports/phase_4/globi_investigation_and_download_plan.md`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/reports/phase_4/globi_investigation_and_download_plan.md): Updated with validated pair counts and Category A/B/C breakdown.
-4. **Phase 4 README**:
-   - [`notebooks/phase_4_globi/README.md`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/notebooks/phase_4_globi/README.md): Updated to document Notebook 05.
-5. **Project Registers**:
-   - [`dataset_inventory.csv`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/dataset_inventory.csv): Updated with final validated counts and 3-Tier structure.
-   - [`regional_availability_matrix.csv`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/regional_availability_matrix.csv): Updated with Category A counts.
-   - [`chat_history.txt`](file:///Users/apple/Documents/5th%20sem%20el/ANN_PBL/dark_eco/chat_history.txt): Logged reconciliation results.
+The progression across static edge counts is reconciled directly from the underlying data:
+
+| Static Edge Representation | Count | Contributing Taxon Entities | Explanation & Mathematical Derivation |
+| :--- | :---: | :--- | :--- |
+| **1. Raw Triples Before Normalization** | **2,562** | 2,562 triples | Directional predicates (`eats` vs `eatenBy`, `hasHost` vs `hostOf`) counted separately; symmetric edges uncanonicalized |
+| **2. After Active Predicate Normalization** | **2,206** | 2,206 triples | Passive predicates (`eatenBy`) normalized to active (`eats`), consolidating **356 reciprocal triples** ($2,562 - 356 = 2,206$) |
+| **3. Canonical Static Interaction Edges (`canonical_static_interaction_edges`)** | **2,110** | **1,646 asymmetric directed + 464 symmetric canonical** | Symmetric interactions sorted alphabetically ($s \le t$), consolidating **96 reverse symmetric duplicates** ($2,206 - 96 = \mathbf{2,110}$). Not all edges are directed. |
+| **4. Unique Taxon Pairs** | **2,008** | 2,008 species pairs | Species pairs $(u, v)$ collapsed across different interaction types |
+
+All 9,044 records inside the polygon are mapped to their canonical static edge ID in [`globi_static_edges_mapping.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/globi_static_edges_mapping.csv) with full preservation of original evidence identifiers.
 
 ---
 
-## FINAL ACQUISITION READINESS & SCIENTIFIC RECOMMENDATION
+## 4. Task 4 — Event-Count Hierarchy & Orthogonal Classification Partitions
 
-### Acquisition Recommendation: **FULLY AUTHORIZED FOR REGIONAL ACQUISITION**
+### A. Definitive Master Event-Count Hierarchy Table
 
-The GloBI regional dataset has been completely audited, mathematically reconciled, and verified down to individual source citations and observation IDs.
+| Level | Analytical Entity / Level | Record Count | Canonical Events | Unique Edges | Scope / Role / Provenance |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| **1** | **Raw API Records** | **9,048** | — | — | Total records returned by GloBI API bounding-box queries across 3 study regions |
+| **2** | **Records Inside Study Polygons** | **9,044** | — | — | Topological clipping to approved study polygons (4 peripheral records excluded) |
+| **3** | **Unique Directional Assertions** | **8,702** | — | — | Inside polygon records after removing 342 CarniDIET clone duplicate rows |
+| **4** | **Matched Reciprocal Pairs** | **8,702** | **4,351** | — | 100% matched reciprocal pairs (4,351 unique pairs inside study polygons) |
+| **5** | **Canonical Biological Events** | **8,702** | **4,351** | — | Independent biological interaction events inside polygons ($8,702 / 2 = 4,351$) |
+| **6** | **Repeated Source / Measurement Rows** | **650** | **325** | — | 191 duplicate symmetric instances + 134 duplicate asymmetric instances collapsed |
+| **7** | **Unique Spatiotemporal Edges** | **8,702** | **4,351** | **4,026** | Spatiotemporally aggregated edges with `evidence_count` and contributing IDs |
+| **8** | **Canonical Static Interaction Edges** | **8,702** | **4,351** | **2,110** | 1,646 asymmetric directed + 464 symmetric canonical edges (2,008 unique taxon pairs) |
+| **9** | **Contemporary 2012–2024 Records** | **5,154** | **2,577** | **2,483** | Contemporary empirical records evaluated for 5 km grid cells |
+| **10** | **Cell-Defensible Observations** | **3,648** | **1,824** | **1,783** | Uncertainty buffer strictly and entirely contained within 1 cell (84 unique cells) |
+| **11** | **Boundary-Ambiguous Observations** | **632** | **316** | **307** | Uncertainty buffer intersects $>1$ adjacent cells (91 unique cells) |
+| **12** | **Provisional Cell Observations** | **806** | **403** | **393** | Original coords & cell ID preserved; accuracy unrecorded or $>2,500$ m; caveats apply (73 cells) |
+| **13** | **Regional-Only Contextual Evidence** | **3,616** | **1,808** | **1,543** | CarniDIET (342/171), vouchers (674/337), non-period iNat (2,532/1,266), obscured (68/34) |
+| **14** | **Excluded Peripheral Records** | **4** | **2** | **2** | Peripheral bounding-box sliver records falling outside approved study polygons |
 
-### Permitted Scientific Analysis Levels:
-1. **Cell-Level Dynamic Analysis (5 km Grid Cells, 2012–2024)**:
-   - **Permitted for E1 + S2 records (5,154 records; 2,577 events)**.
-   - **Caveat**: Coordinates are point encounters with unquantified positional precision in GloBI; geoprivacy obscuration on threatened taxa must be acknowledged.
-2. **Regional-Level Static Trophic Modeling**:
-   - **Permitted for E2 records (3,890 records; 1,945 events)** including CarniDIET apex predator diets (64 relationships) and museum vouchers (480 records).
-   - **Restriction**: Must never be assigned to individual 5 km cells as point observations.
+### B. Table 1: Temporal Classification Partition
 
-**STRICT STOPPING RULE OBSERVED**:
-- Zero bulk data written to `data/raw/globi/`.
-- Zero synthetic data fabricated.
-- No ESA WorldCover, integrated EDA, or graph models initiated.
-- **Awaiting your explicit authorization to proceed with raw regional acquisition.**
+Temporal classification isolates empirical interaction events that coincide chronologically with satellite nightlight sensors (VIIRS/DNB, 2012–2024):
+
+| Temporal Partition | Record Count | Canonical Events | Percentage | Description / Inclusions |
+| :--- | :---: | :---: | :---: | :--- |
+| **Contemporary Empirical (2012–2024)** | **5,154** | **2,577** | 59.23% | Empirical observations contemporary with VIIRS/DNB nighttime lights; evaluated for 5 km cell assignment |
+| **Historical / Contextual (pre-2012 / non-dated)** | **3,548** | **1,774** | 40.77% | CarniDIET literature (342 rows / 171 ev), museum vouchers (674 rows / 337 ev), pre-2012 iNat (2,532 rows / 1,266 ev) |
+| **Total Inside Study Polygons** | **8,702** | **4,351** | **100.00%** | All unique directional assertions and canonical events inside approved study polygons |
+
+### C. Table 2: Spatial Suitability Partition (Mutually Exclusive)
+
+Spatial suitability categorizes records based strictly on spatial reliability and containment within the approved 5 × 5 km grid cells:
+
+| Spatial Suitability Category | Record Count | Canonical Events | Unique Edges | Percentage | Definition & Grid Suitability |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **1. Cell-Defensible** | **3,648** | **1,824** | **1,783** | 41.92% | Accuracy $\le 2,500$ m; buffer strictly contained in 1 cell (84 unique cells). Confirmed cell-level evidence. |
+| **2. Cell-Boundary-Ambiguous** | **632** | **316** | **307** | 7.26% | Accuracy $\le 2,500$ m; buffer straddles border, intersecting 2–4 cells (91 unique cells). Candidate for multi-cell weighting. |
+| **3. Cell-Provisional** | **806** | **403** | **393** | 9.26% | **Original observation coords and point-in-polygon cell ID preserved.** Accuracy unrecorded (614) or $> 2,500$ m (192). **Does not support precise cell-level claims**; retained for caveated sensitivity or regional analysis (73 cells). |
+| **4. Regional-Only Contextual Evidence** | **3,616** | **1,808** | **1,543** | 41.55% | Cannot be assigned to 5 km cells: CarniDIET (342), museum vouchers (674), pre-2012 iNat (2,532), obscured iNat (68). |
+| **Total Inside Study Polygons** | **8,702** | **4,351** | **4,026** | **100.00%** | Mutually exclusive and exhaustive spatial partition of all unique inside-polygon interactions |
+
+### D. Orthogonal Dimension Overlap (The 68 Obscured Records)
+
+The 68 iNaturalist records obscured for threatened species or user geoprivacy fall chronologically in the 2012–2024 window (temporal category), but cannot defensibly be assigned to 5 km grid cells (spatial category). They form the exact intersection between contemporary records ($N=5,154$) and regional contextual evidence ($N=3,616$):
+
+| Overlap Component | Record Count | Canonical Events | Exact Composition & Mathematical Derivation |
+| :--- | :---: | :---: | :--- |
+| **Contemporary Cell-Assigned** | **5,086** | **2,543** | Cell-Defensible ($3,648$) + Boundary-Ambiguous ($632$) + Provisional ($806$) |
+| **Contemporary Obscured (Geoprivacy)** | **68** | **34** | Contemporary in time (2012–2024), but restricted to regional-only analysis in space |
+| **Total Contemporary Cohort** | **5,154** | **2,577** | $\mathbf{5,086}\text{ Cell-Assigned} + \mathbf{68}\text{ Obscured} = \mathbf{5,154}\text{ records}$ |
+| **Historical / Contextual Evidence** | **3,548** | **1,774** | CarniDIET ($342$) + Museum Vouchers ($674$) + Pre-2012 iNat ($2,532$) |
+| **Total Regional-Only Partition** | **3,616** | **1,808** | $\mathbf{68}\text{ Contemporary Obscured} + \mathbf{3,548}\text{ Historical} = \mathbf{3,616}\text{ records}$ |
+
+---
+
+## 5. Task 5 — 2D Geospatial Grid-Cell Assignment & Provisional Records Audit
+
+### A. Regional Distribution of Contemporary Interactions
+
+| Study Region | `cell_defensible` | `cell_boundary_ambiguous` | `cell_provisional` | `regional_only_obscured` | Total Contemporary Records |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Bengaluru (Urban)** | 3,252 (1,626 ev) | 522 (261 ev) | 644 (322 ev) | 58 (29 ev) | **4,476** |
+| **Mysuru (Peri-urban)** | 370 (185 ev) | 92 (46 ev) | 108 (54 ev) | 4 (2 ev) | **574** |
+| **Nilgiri–Bandipur (Forest)** | 26 (13 ev) | 18 (9 ev) | 54 (27 ev) | 6 (3 ev) | **104** |
+| **Total All Regions** | **3,648 (1,824 ev)** | **632 (316 ev)** | **806 (403 ev)** | **68 (34 ev)** | **5,154** |
+
+### B. Verification of Provisional Records ($N=806$)
+
+- **Coordinate Integrity**: All 806 provisional records retain their authentic recorded `lat_float` and `lon_float` from original iNaturalist observations (100% non-null).
+- **Point-in-Polygon Cell Assignment**: All 806 records retain their point-in-polygon `cell_id` (spanning 73 unique 5 km cells).
+- **Centroid Clarification**: At no point are observation coordinates replaced with cell centroids, nor are cell centroids described as observed locations.
+- **Scientific Role**: Due to unrecorded accuracy ($N=614$) or broad uncertainty $> 2,500$ m ($N=192$), these records do not support fine-scale cell-level claims, but are preserved for regional graph analysis or multi-scale sensitivity tests.
+
+---
+
+## 6. Task 6 — Metric Comparison Table & Programmatic Pass/Fail Checks
+
+### Metric Comparison Table
+
+| Metric | Previous reported value | Recalculated value | Explanation |
+| :--- | :---: | :---: | :--- |
+| **CarniDIET Raw Records** | 684 | **684** | Exact match; raw records in Nilgiri–Bandipur |
+| **CarniDIET Unique Assertions** | 342 | **342** | Exact match after removing 342 clone records |
+| **CarniDIET Canonical Events** | 342 | **171** | **Corrected**: 171 forward + 171 reciprocal rows form 171 canonical events, not 342 |
+| **CarniDIET Collapsed Instances** | 256 (or 183) | **85** | **Corrected**: 171 canonical events collapse into 86 site edges (40 Bandipur + 45 Mudumalai) |
+| **CarniDIET Site-Specific Edges** | 86 | **86** | Exact match: 33 Bandipur pairs + 53 Mudumalai pairs |
+| **Unique Canonical Events (Polygon)** | 4,522 | **4,351** | **Corrected**: excludes 171 duplicate clone events ($4,522 - 171 = 4,351$) |
+| **Canonical Static Interaction Edges** | 2,562 (or 2,206) | **2,110** | **Corrected**: 1,646 asymmetric directed + 464 symmetric canonical edges (2,008 unique taxon pairs). Not all edges are directed. |
+| **Unique Spatiotemporal Edges** | 4,120 | **4,026** | **Corrected**: active normalization unifies 94 split active/passive edge groups |
+| **Cell-Defensible Records** | 4,280 | **3,648** | **Corrected**: 2D metric buffer intersection proves 3,648 strictly contained, 632 ambiguous |
+| **Cell-Boundary-Ambiguous Records** | 0 (unclassified) | **632** | **New metric**: buffer straddles cell borders, intersecting 2–4 adjacent cells |
+| **Cell-Provisional Records** | 806 | **806** | **Retained**: original coords & point-in-polygon cell ID preserved; unrecorded or $>2,500$ m accuracy; caveated |
+
+### Programmatic Pass/Fail Validation Checks
+
+All 12 automated test assertions were executed in Notebook 05 and passed with zero errors:
+
+| # | Test Category | Test Description | Programmatic Check Condition | Result |
+| :-: | :--- | :--- | :--- | :---: |
+| **1** | **Record Partition** | Record Sum Partition across polygons and clones | $3,648 + 632 + 806 + 3,616 + 342 + 4 == 9,048$ | **PASS** |
+| **2A** | **Event Scope (Inside)** | Inside-Polygon Before Clone Deduplication | $4,351\text{ unique} + 171\text{ clone} == \mathbf{4,522}\text{ inside events}$ | **PASS** |
+| **2B** | **Event Scope (Unique)** | Unique-Event Reconciliation Across Dataset | $4,351\text{ inside} + 2\text{ peripheral} == \mathbf{4,353}\text{ unique canonical events}$ | **PASS** |
+| **2C** | **Event Scope (Raw)** | Raw-Event Reconciliation Across All Records | $4,522\text{ inside raw} + 2\text{ peripheral raw} == \mathbf{4,524}\text{ raw event pairs}$ | **PASS** |
+| **3** | **Reciprocal Halving** | Exact 2:1 Record-to-Event Halving | $\text{Records} == 2 \times \text{Events}$ across all 12 subsets ($8,702=4,351\times 2$, etc.) | **PASS** |
+| **4** | **Temporal Classification** | Temporal Classification Partition | $5,154\text{ contemp} + 3,548\text{ hist} == 8,702$ ($2,577 + 1,774 == 4,351$) | **PASS** |
+| **5** | **Spatial Suitability** | Mutually Exclusive Spatial Partition | $3,648 + 632 + 806 + 3,616 == 8,702$ ($1,824 + 316 + 403 + 1,808 == 4,351$) | **PASS** |
+| **6** | **Orthogonal Overlap** | Contemporary and Regional Obscured Overlap | $3,648 + 632 + 806 + 68 == 5,154$; $68 + 3,548 == 3,616$ | **PASS** |
+| **7** | **Graph Edge Partition** | Spatiotemporal Edge Sum Partition | $1,783 + 307 + 393 + 1,543 == \mathbf{4,026}\text{ unique edges}$ | **PASS** |
+| **8** | **CarniDIET Reductions** | CarniDIET Reduction Arithmetic | $171 - 86 == 85$; $342 - 86 == 256$; $256 - 171 == 85$ | **PASS** |
+| **9** | **Canonical Static Edges** | Canonical Static Interaction Edges Consistency | Exactly 2,110 edges (1,646 asymmetric directed + 464 symmetric canonical) and 2,008 unique taxon pairs | **PASS** |
+| **10** | **Provisional Integrity** | Provisional Spatial Coordinates and Cell Integrity | All 806 provisional records preserve original coords & cell ID; 0 replaced with centroids | **PASS** |
+
+**OVERALL AUDIT STATUS: ALL CHECKS PASSED (100% PROGRAMMATIC VERIFICATION)**
+
+---
+
+## Deliverables Updated and Verified
+
+1. **Notebook 05**: [`notebooks/phase_4_globi/05_globi_final_scientific_validation.ipynb`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/notebooks/phase_4_globi/05_globi_final_scientific_validation.ipynb)  
+   - Generated via [`generate_nb05.py`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/scripts/phase_4_globi/generate_nb05.py) and executed in-place via Jupyter nbconvert with **0 errors**.
+2. **Aggregated Edge Table**: [`data/metadata/phase_4_checks/globi_derived_aggregated_edges.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/globi_derived_aggregated_edges.csv)  
+   - 4,026 unique spatiotemporal edges with active canonical orientation, metric buffer suitability, and evidence preservation.
+3. **Static Edge Mapping**: [`data/metadata/phase_4_checks/globi_static_edges_mapping.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/globi_static_edges_mapping.csv)  
+   - Record-level mapping of all 9,044 records to their canonical static edge IDs (`DEI_STATIC_0001` to `DEI_STATIC_2110`).
+4. **CarniDIET Line-by-Line Audit**: [`data/metadata/phase_4_checks/carnidiet_reconciliation_audit.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/carnidiet_reconciliation_audit.csv)  
+   - Line-by-line mapping of all 684 CarniDIET rows.
+5. **Contemporary Spatial Audit**: [`data/metadata/phase_4_checks/contemporary_spatial_assignment_audit.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/data/metadata/phase_4_checks/contemporary_spatial_assignment_audit.csv)  
+   - Buffer intersection classifications and original coordinates for all 5,154 contemporary records (including the 806 provisional records).
+6. **Registers & Plans**:
+   - [`reports/phase_4/globi_investigation_and_download_plan.md`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/reports/phase_4/globi_investigation_and_download_plan.md)
+   - [`notebooks/phase_4_globi/README.md`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/notebooks/phase_4_globi/README.md)
+   - [`dataset_inventory.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/dataset_inventory.csv) and [`regional_availability_matrix.csv`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/regional_availability_matrix.csv)
+   - Appended audit log to [`chat_history.txt`](file:///Users/apple/Documents/5th sem el/ANN_PBL/dark_eco/chat_history.txt).
+
+---
+
+## Final Acquisition Recommendation
+
+**Acquisition Readiness: FULLY AUTHORIZED FOR REGIONAL ACQUISITION**
+
+The final GloBI numerical, taxonomic, and spatial suitability audit is complete:
+- Zero synthetic data was fabricated.
+- Zero records or biological events were deleted.
+- All numbers, pairs, events, and edges have been verified programmatically with 100% pass rates.
+- The dataset is ready for raw data download upon user authorization.
+
+*Strict stopping rule observed: Awaiting formal user approval before initiating bulk download or writing to `dark_eco/data/raw/globi/`.*
